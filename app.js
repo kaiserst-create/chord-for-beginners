@@ -1,5 +1,5 @@
 // Chords for Beginners: Oberfläche
-// Aufbau wie app.js von „Songwriting & Chords“, abgespeckt: elf Folgen, sechs Tonarten, nur Grundgriffe,
+// Aufbau wie app.js von „Songwriting & Chords“, abgespeckt: elf Folgen, sieben Tonarten, nur Grundgriffe,
 // keine Favoriten und keine Filtermenüs. Neu sind die Genre-Hinweise und die Schlag- und Zupfmuster.
 (function () {
   'use strict';
@@ -57,8 +57,11 @@
     var stufen = f.stufen.map(String).slice(0, 64);
     if (!stufen.every(function (s) { return ERLAUBT.indexOf(s) >= 0; })) return null;
     var gt = +(f.eingabe && f.eingabe.grundton);
+    var id = f.id.slice(0, 40);
+    // eigene Folgen dürfen keine Katalog-Folge verdecken (zum Beispiel eine importierte Folge mit der ID „happy“)
+    if (F.folgen.some(function (x) { return x.id === id; })) id = 'eigen-' + id;
     var o = {
-      id: f.id.slice(0, 40), titel: String(f.titel || 'Eigene Akkordfolge').slice(0, 60), stufen: stufen, ton: 'dur',
+      id: id, titel: String(f.titel || 'Eigene Akkordfolge').slice(0, 60), stufen: stufen, ton: 'dur',
       genres: [], stimmung: [], notiz: String(f.notiz || '').slice(0, 300), takt: f.takt === 2 ? 2 : 4, eigen: true, quelle: 'Eigene Akkordfolge',
       eingabe: { grundton: GT.indexOf(gt) >= 0 ? gt : 0 },
     };
@@ -520,7 +523,8 @@
         if (/^[♭b#]?[IViv]/.test(roh)) { st = roh.replace(/^b/, '♭'); SC.stufeZuAkkord(st, k); }
         else {
           var name = normAkkordEingabe(roh), a = name && SC.parseAkkord(name);
-          if (a && !SC.TYPES.hasOwnProperty(a.typ) && /^(maj7|6|m6|9|m9|sus2|sus4|add9|°7?|\+|5|m7♭5)$/.test(a.typ)) st = 'fremd';   // Akkordart gibt es hier nicht
+          if (/^[A-Ha-h](is|es|#|♭|b)?[^/]*\/[A-Ha-h]/.test(roh)) st = 'fremd';   // Slash-Akkorde wie C/E gibt es hier nicht
+          else if (a && !SC.TYPES.hasOwnProperty(a.typ) && /^(maj7|6|m6|9|m9|sus2|sus4|add9|°7?|\+|5|m7♭5)$/.test(a.typ)) st = 'fremd';   // Akkordart gibt es hier nicht
           else st = name && SC.akkordZuStufe(name, k);
         }
       } catch (e) { st = null; }
