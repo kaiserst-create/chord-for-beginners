@@ -1,0 +1,495 @@
+/* Chords for Beginners: Optik wie „Songwriting & Chords“ (web/style.css), dazu Genre-Hinweise und Muster */
+
+:root {
+  --bg: #f5f3ee;
+  --flaeche: #ffffff;
+  --flaeche-2: #f8f7f3;
+  --linie: #e3e0d8;
+  --text: #22232a;
+  --leise: #6a6c75;
+  --akzent: #3056a0;
+  --akzent-text: #ffffff;
+  --akzent-weich: #e8eef9;
+  --akzent-rand: #b9c9ea;
+  --warm: #b4552d;
+  --warm-weich: #f8ebe3;
+  --gut: #2b7f3e;
+  --gut-weich: #e2f2e6;
+  --g-ink: #222222;
+  --g-gitter: #8a8a8a;
+  --g-x: #9a9a9a;
+  --schatten: 0 1px 2px rgba(30, 30, 40, .05), 0 4px 16px rgba(30, 30, 40, .05);
+  --radius: 14px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14161b; --flaeche: #1c1f26; --flaeche-2: #22262e; --linie: #2f333d; --text: #e9e9ec; --leise: #a1a5af;
+    --akzent: #8fb0ff; --akzent-text: #10131a; --akzent-weich: #232d45; --akzent-rand: #3c4f7d;
+    --warm: #f0a07a; --warm-weich: #3a2a22;
+    --gut: #6fd08e; --gut-weich: #1d3426;
+    --g-ink: #ececf0; --g-gitter: #737885; --g-x: #8b909b;
+    --schatten: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 16px rgba(0, 0, 0, .25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14161b; --flaeche: #1c1f26; --flaeche-2: #22262e; --linie: #2f333d; --text: #e9e9ec; --leise: #a1a5af;
+  --akzent: #8fb0ff; --akzent-text: #10131a; --akzent-weich: #232d45; --akzent-rand: #3c4f7d;
+  --warm: #f0a07a; --warm-weich: #3a2a22;
+  --gut: #6fd08e; --gut-weich: #1d3426;
+  --g-ink: #ececf0; --g-gitter: #737885; --g-x: #8b909b;
+  --schatten: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 16px rgba(0, 0, 0, .25);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.5 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+h1, h2, h3 { margin: 0; line-height: 1.2; letter-spacing: -.01em; }
+h2 { font-size: 1.3rem; }
+h3 { font-size: 1rem; }
+button, select, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+.leise { color: var(--leise); }
+[hidden] { display: none !important; }
+
+/* ------------------------------------------------ Kopf */
+.kopf {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  max-width: 1320px; margin: 0 auto; padding: 18px 20px 8px;
+}
+.marke { display: flex; align-items: center; gap: 12px; }
+.logo { width: 44px; height: 44px; flex: none; }
+.kopf h1 { font-size: 1.45rem; font-weight: 750; }
+.untertitel { margin: 2px 0 0; color: var(--leise); font-size: .9rem; }
+.kopf-rechts { display: flex; align-items: center; gap: 10px; }
+
+.segment {
+  display: inline-flex; background: var(--flaeche-2); border: 1px solid var(--linie); border-radius: 999px; padding: 3px; gap: 2px;
+  max-width: 100%; overflow-x: auto; scrollbar-width: none;
+}
+.feld .segment { align-self: flex-start; }
+.segment button {
+  border: 0; background: transparent; padding: 7px 14px; border-radius: 999px; font-weight: 600; color: var(--leise);
+  transition: background .15s, color .15s; white-space: nowrap;
+}
+.segment button[aria-checked="true"] { background: var(--akzent); color: var(--akzent-text); }
+.segment.klein button { padding: 6px 11px; font-size: .9rem; }
+.segment button:focus-visible, .icon-knopf:focus-visible, .tabs button:focus-visible { outline: 2px solid var(--akzent); outline-offset: 2px; }
+
+.icon-knopf {
+  width: 40px; height: 40px; border-radius: 999px; border: 1px solid var(--linie); background: var(--flaeche);
+  display: grid; place-items: center; padding: 0;
+}
+.icon-knopf svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.icon-knopf .mond { fill: currentColor; stroke: none; }
+.icon-knopf .mond { display: none; }
+:root[data-theme="dark"] .icon-knopf .sonne { display: none; }
+:root[data-theme="dark"] .icon-knopf .mond { display: block; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .icon-knopf .sonne { display: none; }
+  :root:not([data-theme="light"]) .icon-knopf .mond { display: block; }
+}
+
+/* ------------------------------------------------ Tabs */
+.tabs {
+  max-width: 1320px; margin: 0 auto; padding: 6px 20px 0; display: flex; gap: 4px;
+  border-bottom: 1px solid var(--linie); overflow-x: auto; scrollbar-width: none;
+}
+.tabs button {
+  border: 0; background: none; padding: 10px 14px 12px; font-weight: 650; color: var(--leise);
+  border-bottom: 2.5px solid transparent; margin-bottom: -1px; white-space: nowrap;
+}
+.tabs button[aria-selected="true"] { color: var(--text); border-bottom-color: var(--akzent); }
+
+main { max-width: 1320px; margin: 0 auto; padding: 16px 20px 24px; }
+.karte { background: var(--flaeche); border: 1px solid var(--linie); border-radius: var(--radius); box-shadow: var(--schatten); }
+
+/* ------------------------------------------------ Filter */
+.filter { display: flex; flex-wrap: wrap; gap: 12px 16px; padding: 14px 16px; align-items: flex-end; }
+.filter.innen { padding: 12px 0 4px; }
+.feld { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.feld > span, .sg-kt-kopf > span { font-size: .75rem; font-weight: 650; text-transform: uppercase; letter-spacing: .05em; color: var(--leise); }
+.feld.breit { flex: 1 1 260px; }
+select, input[type="search"] {
+  appearance: none; -webkit-appearance: none;
+  background: var(--flaeche-2); border: 1px solid var(--linie); border-radius: 10px; padding: 8px 12px; min-height: 38px;
+  min-width: 0; max-width: 100%;
+}
+select {
+  padding-right: 32px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--leise) 50%), linear-gradient(135deg, var(--leise) 50%, transparent 50%);
+  background-position: calc(100% - 17px) 52%, calc(100% - 12px) 52%;
+  background-size: 5px 5px; background-repeat: no-repeat;
+}
+select:focus, input:focus { outline: 2px solid var(--akzent); outline-offset: 1px; }
+input[type="search"] { width: 100%; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  border: 1px solid var(--linie); background: var(--flaeche-2); border-radius: 999px; padding: 5px 11px; font-size: .88rem; font-weight: 600;
+  color: var(--leise);
+}
+.chip[aria-pressed="true"] { background: var(--akzent-weich); border-color: var(--akzent-rand); color: var(--text); }
+.chip .roem { font-weight: 500; opacity: .75; margin-right: 4px; }
+
+/* ------------------------------------------------ Liste */
+.liste-kopf { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin: 16px 2px 10px; color: var(--leise); font-size: .9rem; }
+.liste-aktionen { display: inline-flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.link-knopf { border: 0; background: none; color: var(--akzent); font-weight: 600; padding: 0; }
+.link-knopf.gefahr, .knopf.gefahr { color: var(--warm); border-color: var(--warm); }
+.liste { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 10px; }
+.leer { padding: 24px; text-align: center; color: var(--leise); grid-column: 1 / -1; }
+.werkzeuge { padding: 12px 16px; margin-bottom: 12px; display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; }
+.werkzeuge p { margin: 0; color: var(--leise); font-size: .9rem; flex: 1 1 280px; }
+
+.folge-karte {
+  text-align: left; width: 100%; border: 1px solid var(--linie); background: var(--flaeche); border-radius: 12px; padding: 11px 13px;
+  display: grid; gap: 4px; transition: border-color .15s, box-shadow .15s, transform .15s; cursor: pointer; align-content: start;
+  -webkit-tap-highlight-color: transparent;
+}
+.folge-karte:hover { border-color: var(--akzent-rand); box-shadow: var(--schatten); }
+.folge-karte:active { transform: scale(.99); }
+.folge-karte:focus-visible { outline: 2px solid var(--akzent); outline-offset: 2px; }
+.fk-kopf { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
+.fk-titel { font-weight: 700; padding-top: 2px; }
+.fk-tonart { font-size: .78rem; color: var(--leise); white-space: nowrap; flex: none; padding-top: 3px; }
+.tag.eigen { background: var(--akzent-weich); border-color: transparent; color: var(--akzent); font-weight: 600; }
+
+/* ------------------------------------------------ Detail- und Editor-Ansicht */
+.ansicht-kopf {
+  position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+  background: var(--bg); padding: 8px 0 10px; margin-bottom: 4px;
+}
+.ansicht-titel { font-size: 1.15rem; flex: 1; }
+.zurueck {
+  border: 1px solid var(--linie); background: var(--flaeche); border-radius: 999px; padding: 7px 15px 7px 11px; font-weight: 650; color: var(--akzent);
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.zurueck:hover { border-color: var(--akzent-rand); }
+.aktionen { display: flex; gap: 8px; flex-wrap: wrap; }
+.detail-wahl { display: flex; gap: 10px; flex-wrap: wrap; }
+.detail-wahl select { min-width: 120px; }
+.klein-text { font-size: .85rem; margin: 6px 0 0; }
+
+.editor { padding: 16px 18px 18px; display: grid; gap: 14px; }
+.editor .filter.innen { padding: 0; }
+.editor input[type="text"], .editor textarea {
+  background: var(--flaeche-2); border: 1px solid var(--linie); border-radius: 10px; padding: 9px 12px; min-height: 40px; width: 100%; font: inherit; color: inherit;
+}
+.editor #e-akkorde { font-size: 1.05rem; font-weight: 600; letter-spacing: .02em; }
+.editor textarea { resize: vertical; }
+.editor input:focus, .editor textarea:focus { outline: 2px solid var(--akzent); outline-offset: 1px; }
+.editor .sequenz { margin: 0; }
+.editor .feld > .segment { margin-bottom: 8px; }
+.editor #e-zusatz { flex-wrap: wrap; overflow: visible; border-radius: 18px; }   /* alle Zusätze sichtbar, auch auf dem iPhone */
+.palette { display: grid; gap: 10px; margin-bottom: 8px; }
+.pal-gruppe { display: grid; gap: 5px; font-size: .8rem; }
+.pal {
+  border: 1px solid var(--akzent-rand); background: var(--akzent-weich); color: var(--text); border-radius: 10px; padding: 6px 12px; min-width: 58px;
+  display: grid; text-align: center; line-height: 1.25;
+}
+.pal b { font-size: 1rem; }
+.pal small { color: var(--leise); font-size: .72rem; }
+.pal:active { transform: scale(.96); }
+.seq-akkord.fehler { border-color: var(--warm); background: var(--warm-weich); }
+.seq-akkord.fehler small { color: var(--warm); }
+.editor-knoepfe { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.editor-knoepfe .gefahr { margin-left: auto; }
+
+/* ------------------------------------------------ Einzelner Akkord */
+.akkord-wahl .chips { gap: 5px; }
+.chip.gross { padding: 6px 12px; font-size: .92rem; min-width: 44px; }
+.chip.gross[aria-pressed="true"] { background: var(--akzent); border-color: var(--akzent); color: var(--akzent-text); }
+.akkord-ergebnis { margin-top: 14px; padding: 16px 18px 18px; }
+.akkord-ergebnis .reihe-kopf h2 { font-size: 1.6rem; }
+.fk-akkorde { font-size: 1.05rem; font-weight: 650; color: var(--akzent); overflow-wrap: anywhere; }
+.fk-stufen { font-size: .82rem; color: var(--leise); overflow-wrap: anywhere; }
+.tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+.tag { font-size: .72rem; padding: 2px 8px; border-radius: 999px; background: var(--flaeche-2); border: 1px solid var(--linie); color: var(--leise); }
+.tag.st { background: var(--warm-weich); border-color: transparent; color: var(--warm); }
+
+.detail { padding: 18px 20px 20px; }
+.detail-kopf { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: flex-start; }
+.detail .sub { color: var(--leise); margin-top: 3px; font-size: .9rem; }
+.detail .info { margin: 10px 0 0; }
+.hinweis { margin: 10px 0 0; padding: 9px 12px; border-radius: 10px; background: var(--flaeche-2); border-left: 3px solid var(--akzent); font-size: .92rem; }
+.hinweis.warm { border-left-color: var(--warm); }
+.hinweis button { margin-left: 6px; }
+
+.sequenz { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 6px; }
+.sequenz.zeilen { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.seq-akkord {
+  border: 1px solid var(--linie); background: var(--flaeche-2); border-radius: 12px; padding: 8px 12px; min-width: 64px; text-align: center;
+  display: grid; gap: 1px; transition: background .12s, border-color .12s, transform .12s;
+}
+.seq-akkord b { font-size: 1.15rem; }
+.seq-akkord small { color: var(--leise); font-size: .78rem; }
+.seq-akkord.spielt { background: var(--akzent); border-color: var(--akzent); color: var(--akzent-text); transform: translateY(-1px); }
+.seq-akkord.spielt small { color: var(--akzent-text); opacity: .85; }
+
+.spieler { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin: 14px 0 4px; }
+.knopf {
+  border: 1px solid var(--akzent); background: var(--akzent); color: var(--akzent-text); border-radius: 999px; padding: 8px 16px; font-weight: 650;
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.knopf.zweit { background: transparent; color: var(--akzent); }
+.knopf.klein { padding: 6px 13px; font-size: .88rem; }
+.knopf:disabled { opacity: .45; cursor: default; }
+.mini { width: auto !important; height: auto !important; padding: 3px 10px !important; font-size: .78rem !important; color: var(--akzent); }
+.knopf svg { width: 14px; height: 14px; fill: currentColor; }
+.spieler label { display: inline-flex; align-items: center; gap: 8px; color: var(--leise); font-size: .9rem; }
+.spieler input[type="range"] { width: 110px; accent-color: var(--akzent); }
+.spieler input[type="checkbox"], .griffe-kopf input { accent-color: var(--akzent); width: 16px; height: 16px; }
+
+.griffe-kopf { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin: 20px 0 10px; }
+.griffe-kopf label { display: inline-flex; align-items: center; gap: 7px; color: var(--leise); font-size: .9rem; }
+
+/* ------------------------------------------------ Griffbilder */
+.griffe { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 10px; }
+.griff {
+  border: 1px solid var(--linie); background: var(--flaeche); border-radius: 12px; padding: 8px 8px 9px; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 2px; position: relative;
+}
+.griff-name { font-weight: 750; font-size: 1.05rem; }
+.griff-name .klingt { display: block; font-weight: 500; font-size: .74rem; color: var(--leise); }
+.griff-bild { border: 0; background: none; padding: 0; width: 100%; max-width: 128px; border-radius: 8px; }
+.griff-bild:hover { background: var(--flaeche-2); }
+.griff-bild:focus-visible { outline: 2px solid var(--akzent); }
+.griffbild { width: 100%; height: auto; display: block; }
+.griff-tab { color: var(--akzent); font-size: .82rem; font-variant-numeric: tabular-nums; letter-spacing: .04em; }
+.griff-quelle { color: var(--leise); font-size: .72rem; line-height: 1.25; min-height: 1.8em; }
+.griff.klein { padding: 6px 6px 7px; }
+.griff.klein .griff-bild { max-width: 104px; }
+
+.gb-l { stroke: var(--g-gitter); stroke-width: .9; }
+.gb-sattel { fill: var(--g-ink); }
+.gb-p { fill: var(--g-ink); }
+.gb-x { stroke: var(--g-x); stroke-width: 1.2; fill: none; }
+.gb-o { stroke: var(--g-ink); stroke-width: 1.1; fill: none; }
+.gb-bund { fill: var(--g-ink); font-size: 8.5px; text-anchor: end; dominant-baseline: middle; font-family: inherit; }
+
+.reihe { margin-top: 18px; }
+.reihe-kopf { display: flex; align-items: baseline; gap: 4px 10px; margin-bottom: 8px; flex-wrap: wrap; }
+.reihe-kopf .roem { color: var(--leise); font-weight: 600; }
+.reihe-kopf h3 { font-size: 1.15rem; }
+.reihe-kopf .knopf { padding: 4px 11px; font-size: .82rem; margin-left: auto; }
+.reihe .griffe { grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); }
+
+.tonart-kopf { margin-top: 14px; padding: 14px 18px; display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: flex-end; justify-content: space-between; }
+.tonart-kopf p { margin: 3px 0 0; }
+#t-griffe { margin-top: 4px; }
+#t-griffe .reihe { background: var(--flaeche); border: 1px solid var(--linie); border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--schatten); margin-top: 14px; }
+
+.fuss { max-width: 1320px; margin: 0 auto; padding: 8px 20px 32px; color: var(--leise); font-size: .82rem; }
+.fuss p { margin: 2px 0; }
+#install-zeile { margin-top: 8px; }
+#install-zeile .link-knopf { font-size: .88rem; }
+
+/* ------------------------------------------------ Hinweis zum Installieren */
+html.ih-offen body { padding-bottom: calc(var(--ih-hoehe, 0px) + env(safe-area-inset-bottom)); }
+.install-hinweis {
+  position: fixed; z-index: 40; left: 0; right: 0; margin: 0 auto;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  width: min(520px, calc(100% - 24px - env(safe-area-inset-left) - env(safe-area-inset-right)));
+  display: flex; gap: 12px; align-items: flex-start;
+  background: var(--flaeche); border: 1px solid var(--akzent-rand); border-radius: 18px; padding: 14px 12px 14px 14px;
+  box-shadow: 0 2px 6px rgba(20, 20, 30, .08), 0 12px 32px rgba(20, 20, 30, .16);
+  opacity: 0; transform: translateY(16px); transition: opacity .25s ease, transform .25s ease;
+}
+.install-hinweis.da { opacity: 1; transform: none; }
+.ih-icon { width: 44px; height: 44px; border-radius: 10px; flex: none; }
+.ih-text { flex: 1; min-width: 0; display: grid; gap: 6px; font-size: .92rem; }
+.ih-text h2 { font-size: 1rem; }
+.ih-text p { margin: 0; }
+.ih-text ol { margin: 2px 0 0; padding-left: 20px; display: grid; gap: 4px; }
+.ih-text b { font-weight: 650; }
+.ih-text .knopf { justify-self: start; margin-top: 4px; }
+.ih-symbol { width: 18px; height: 18px; vertical-align: -3px; fill: none; stroke: var(--akzent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.ih-zu { width: 32px; height: 32px; flex: none; margin: -4px -2px 0 0; font-size: 1.3rem; line-height: 1; color: var(--leise); }
+@media (max-width: 400px) { .ih-icon { display: none; } }
+html.sg-offen .install-hinweis { display: none; }
+@media (prefers-reduced-motion: reduce) { .install-hinweis { transition: none; transform: none; } }
+
+/* ------------------------------------------------ Stimmgerät */
+html.sg-offen, html.sg-offen body { overflow: hidden; }
+.vollbild {
+  position: fixed; inset: 0; z-index: 50; background: var(--bg); overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+.vollbild-innen { max-width: 600px; margin: 0 auto; padding: 10px 20px 32px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.vollbild .ansicht-kopf { margin: 0; }
+.sg-inst { justify-self: start; }
+.sg-zeile { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: flex-end; }
+.sg-zeile .feld { flex: 1 1 220px; }
+.sg-zeile select { width: 100%; }
+.sg-zeile .sg-kt-feld { flex-basis: 340px; }   /* lieber eigene Zeile als ein winziger Regler */
+.sg-kt .mini { white-space: nowrap; }
+.sg-kt-kopf { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.sg-kt-kopf .knopf { padding: 4px 12px; }
+.sg-kt-kopf .knopf[aria-pressed="true"] { background: var(--akzent); color: var(--akzent-text); }
+.sg-kt { display: flex; align-items: center; gap: 8px; min-height: 38px; }
+.sg-kt input[type="range"] { flex: 1; width: 0; min-width: 60px; accent-color: var(--akzent); }
+.sg-kt output { font-weight: 700; min-width: 58px; text-align: center; font-variant-numeric: tabular-nums; }
+.icon-knopf.klein { width: 34px; height: 34px; flex: none; font-size: 1.15rem; font-weight: 700; line-height: 1; color: var(--text); }
+.sg-anzeige { padding: 14px 16px 18px; display: grid; justify-items: center; gap: 8px; text-align: center; }
+.sg-skala { width: 100%; max-width: 400px; height: auto; display: block; overflow: visible; }
+.sg-skala .bogen { fill: none; stroke: var(--linie); stroke-width: 2; }
+.sg-skala .zone { fill: none; stroke: var(--gut); stroke-width: 10; opacity: .35; }
+.sg-skala .strich { stroke: var(--g-gitter); stroke-width: 1.3; }
+.sg-skala .strich.lang { stroke: var(--text); stroke-width: 2.2; }
+.sg-skala text { fill: var(--leise); font-size: 10px; font-family: inherit; font-weight: 600; }
+.sg-nadel line { stroke: var(--text); stroke-width: 3.2; stroke-linecap: round; }
+.sg-nabe { fill: var(--text); }
+.sg-ton { font-size: 4.4rem; font-weight: 750; line-height: 1; letter-spacing: -.02em; min-height: 4.4rem; display: flex; align-items: baseline; justify-content: center; }
+.sg-ton small { font-size: 1.25rem; font-weight: 650; color: var(--leise); margin-left: 2px; }
+.sg-ton .anders { font-size: 1.3rem; font-weight: 600; color: var(--leise); margin-left: 10px; }
+.sg-ton .anders::before { content: "\2009oder\2009"; font-size: .8rem; font-weight: 500; }
+.sg-status { font-weight: 650; padding: 5px 14px; border-radius: 999px; background: var(--flaeche-2); color: var(--leise); min-height: 34px; display: inline-flex; align-items: center; font-variant-numeric: tabular-nums; }
+.sg-info { font-size: .85rem; color: var(--leise); min-height: 1.3em; font-variant-numeric: tabular-nums; }
+.sg-anzeige.gut .sg-nadel line { stroke: var(--gut); }
+.sg-anzeige.gut .sg-nabe { fill: var(--gut); }
+.sg-anzeige.gut .sg-ton { color: var(--gut); }
+.sg-anzeige.gut .sg-status { background: var(--gut-weich); color: var(--gut); }
+.sg-anzeige.daneben .sg-nadel line { stroke: var(--warm); }
+.sg-anzeige.daneben .sg-nabe { fill: var(--warm); }
+.sg-anzeige.daneben .sg-status { background: var(--warm-weich); color: var(--warm); }
+.sg-anzeige.still .sg-nadel, .sg-anzeige.still .sg-nabe { opacity: .35; }
+.sg-anzeige.still .sg-ton { color: var(--leise); }
+.sg-pegel { width: 140px; height: 4px; border-radius: 2px; background: var(--flaeche-2); border: 1px solid var(--linie); overflow: hidden; box-sizing: content-box; }
+.sg-pegel i { display: block; height: 100%; width: 0; background: var(--akzent); transition: width .08s linear; }
+.sg-saiten-feld { display: grid; justify-items: center; gap: 4px; margin-top: 6px; }
+.sg-saiten { justify-content: center; }
+.sg-saiten .chip { min-height: 40px; }
+.sg-saite { min-width: 48px; display: inline-flex; align-items: baseline; justify-content: center; font-size: 1.05rem; color: var(--text); }
+.sg-saite small { font-size: .7rem; color: var(--leise); margin-left: 1px; }
+.sg-saite.erkannt { border-color: var(--akzent); box-shadow: 0 0 0 1px var(--akzent); }
+.sg-saite.gestimmt::after { content: "\2713"; margin-left: 4px; color: var(--gut); font-size: .85rem; font-weight: 800; }
+.sg-mikro { display: grid; justify-items: center; gap: 8px; text-align: center; }
+.sg-mikro .knopf { padding: 11px 22px; font-size: 1rem; }
+.sg-mikro .knopf svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.sg-mikro .klein-text { max-width: 440px; margin: 0; }
+.sg-mikro .klein-text.warm { color: var(--warm); }
+
+/* ------------------------------------------------ schmal */
+@media (max-width: 560px) {
+  .kopf { padding: 14px 16px 6px; }
+  .kopf h1 { font-size: 1.2rem; }
+  .untertitel { display: none; }
+  .logo { width: 38px; height: 38px; }
+  .tabs, main, .fuss { padding-left: 16px; padding-right: 16px; }
+  .filter { padding: 12px; gap: 10px 12px; }
+  .filter .feld:not(.breit) { flex: 1 1 calc(50% - 6px); }
+  .filter .feld.voll { flex-basis: 100%; }
+  .filter .feld select { width: 100%; }
+  .detail { padding: 14px; }
+  .nur-breit { display: none; }
+  .tabs button { padding: 10px 11px 12px; }
+  .liste { grid-template-columns: 1fr; }
+  .detail-wahl { width: 100%; }
+  .detail-wahl .feld { flex: 1 1 0; }
+  .detail-wahl select { min-width: 0; width: 100%; }
+  .editor { padding: 14px; }
+  .aktionen { width: 100%; }
+  .griffe { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .reihe .griffe { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sequenz.zeilen { gap: 6px; }
+  .seq-akkord { min-width: 54px; padding: 7px 8px; }
+  .segment.klein button { padding: 6px 10px; }
+  .vollbild-innen { padding: 8px 16px 28px; gap: 14px; }
+  .sg-ton { font-size: 3.8rem; min-height: 3.8rem; }
+}
+/* ------------------------------------------------ sehr schmal (iPhone SE der ersten Generation) */
+@media (max-width: 359px) {
+  .filter .feld:has(> .segment) { flex-basis: 100%; }
+  .segment.klein button { padding: 6px 8px; font-size: .86rem; }
+  .sg-kt { gap: 6px; }
+}
+/* ------------------------------------------------ Chords for Beginners: Ergänzungen */
+.nur-schmal { display: none; }
+/* leichteste Tonart fürs Instrument: grüner Punkt am Knopf und ein Satz darunter */
+.segment button.leicht { position: relative; }
+.segment button.leicht::after { content: ""; position: absolute; top: 3px; right: 3px; width: 6px; height: 6px; border-radius: 50%; background: var(--gut); }
+.segment button.leicht[aria-checked="true"]::after { background: var(--akzent-text); }
+.leicht-hinweis { margin: -4px 0 0; flex-basis: 100%; font-size: .82rem; color: var(--leise); display: flex; align-items: center; gap: 6px; }
+.kapo-tipp { margin-top: 14px; padding: 10px 12px; border-radius: 10px; background: var(--flaeche-2); font-size: .92rem; }
+.kapo-tipp summary { font-weight: 650; color: var(--akzent); cursor: pointer; }
+.kapo-tipp p { margin: 8px 0 0; }
+.leicht-punkt { width: 7px; height: 7px; border-radius: 50%; background: var(--gut); flex: none; display: inline-block; }
+.chip.gross small { display: block; font-size: .68rem; font-weight: 500; opacity: .8; }
+.griff.fremd { border-style: dashed; }
+.griff-quelle .roem { font-weight: 700; color: var(--text); }
+.griffe.einzeln { grid-template-columns: repeat(auto-fill, minmax(150px, 180px)); }
+.tonart-griffe { margin-top: 14px; padding: 14px 16px; }
+
+.genre-box { margin: 14px 0 0; padding: 12px 14px; border-radius: 12px; background: var(--akzent-weich); }
+.genre-box h3 { font-size: .95rem; margin-bottom: 4px; }
+.genre-box p { margin: 0; }
+.genre-box .klein-text { margin-top: 6px; }
+
+/* Schreibweise der Muster: ein Kästchen je Achtel, Zählzeit darunter */
+.rhythmus-block { margin-top: 18px; padding-top: 4px; border-top: 1px solid var(--linie); }
+.rhythmus-block .griffe-kopf { margin: 12px 0 8px; align-items: flex-end; }
+.griffe-kopf .muster-wahl { display: flex; align-items: stretch; color: inherit; font-size: inherit; }
+.muster-wahl select { min-width: 190px; }
+.schrift { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 4px; max-width: 460px; margin: 4px 0 6px; }
+.schrift.drei { grid-template-columns: repeat(6, minmax(0, 1fr)); max-width: 345px; }
+.schlag {
+  display: grid; justify-items: center; gap: 1px; padding: 5px 0 4px; border-radius: 9px; border: 1px solid var(--linie);
+  background: var(--flaeche-2); transition: background .08s, border-color .08s, transform .08s;
+}
+.schlag b { font-size: 1.25rem; line-height: 1.15; min-height: 1.15em; }
+.schlag small { font-size: .72rem; color: var(--leise); font-variant-numeric: tabular-nums; }
+.schlag.und { background: transparent; }
+.schlag.und small { opacity: .75; }
+.schlag.pause b { color: var(--leise); opacity: .6; }
+.schlag.jetzt { background: var(--akzent); border-color: var(--akzent); color: var(--akzent-text); transform: translateY(-1px); }
+.schlag.jetzt small, .schlag.jetzt.pause b { color: var(--akzent-text); opacity: .9; }
+
+.rhythmus-kopf { padding: 16px 18px; display: grid; gap: 6px; }
+.rhythmus-kopf p { margin: 0; color: var(--leise); }
+.rhythmus-kopf .filter.innen { padding: 8px 0 0; }
+.tempo { display: inline-flex; align-items: center; gap: 8px; min-height: 38px; color: var(--leise); font-size: .9rem; }
+.tempo input { width: 140px; accent-color: var(--akzent); }
+.muster-liste { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; margin-top: 14px; }
+.muster-karte { padding: 14px 16px 16px; display: grid; gap: 8px; align-content: start; }
+.muster-karte.gewaehlt { border-color: var(--akzent-rand); }
+.muster-karte p { margin: 0; }
+.muster-karte .link-knopf { justify-self: start; font-size: .9rem; }
+.mk-kopf { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.mk-kopf h3 { font-size: 1.05rem; }
+.mk-takt { font-size: .78rem; color: var(--leise); font-weight: 650; }
+.mk-kopf .knopf { margin-left: auto; }
+.mk-genre { font-size: .9rem; color: var(--leise); }
+.mk-genre b { color: var(--text); }
+.schrift-hilfe { margin-top: 14px; padding: 12px 16px 14px; }
+.schrift-hilfe summary { font-weight: 700; cursor: pointer; }
+.legende { display: grid; grid-template-columns: max-content 1fr; gap: 6px 12px; margin: 10px 0 4px; }
+.legende dt { font-weight: 750; text-align: center; min-width: 2.2em; }
+.legende dd { margin: 0; color: var(--leise); }
+
+@media (max-width: 560px) {
+  .nur-schmal { display: inline; }
+  .muster-liste { grid-template-columns: 1fr; }
+  .muster-wahl { flex: 1 1 100%; }
+  .muster-wahl select { width: 100%; min-width: 0; }
+  .schlag b { font-size: 1.1rem; }
+  .griffe.einzeln { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 359px) {
+  .tabs { gap: 0; }
+  .tabs button { padding: 10px 8px 12px; }
+  .tempo input { width: 110px; }
+}
+
+@media print {
+  .kopf-rechts, .tabs, .filter, .ansicht-kopf, .spieler, .fuss, .detail-wahl, .muster-wahl, .vollbild, .install-hinweis, .rhythmus-block .link-knopf, .mk-kopf .knopf { display: none !important; }
+  .detail { position: static; box-shadow: none; border: 0; }
+}

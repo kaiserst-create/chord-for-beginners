@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chords for Beginners</title>
+<meta name="description" content="Einfache Akkordfolgen für den Anfang, mit Griffbildern für Gitarre und Ukulele, Schlag- und Zupfmustern und Stimmgerät. Läuft offline.">
+<meta name="theme-color" content="#f5f3ee" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14161b" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Beginners">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+<script>
+  // Thema sofort setzen, damit nichts aufblitzt
+  try { var t = localStorage.getItem('cfb-thema'); if (t === 'hell' || t === 'dunkel') document.documentElement.dataset.theme = t === 'hell' ? 'light' : 'dark'; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="kopf">
+  <div class="marke">
+    <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+      <rect width="64" height="64" rx="14" fill="var(--akzent)"/>
+      <g stroke="var(--akzent-text)" stroke-width="2.2" stroke-linecap="round">
+        <line x1="18" y1="20" x2="18" y2="50"/><line x1="25.6" y1="20" x2="25.6" y2="50"/><line x1="33.2" y1="20" x2="33.2" y2="50"/>
+        <line x1="40.8" y1="20" x2="40.8" y2="50"/><line x1="48.4" y1="20" x2="48.4" y2="50"/>
+        <line x1="18" y1="30" x2="48.4" y2="30" stroke-width="1.6"/><line x1="18" y1="40" x2="48.4" y2="40" stroke-width="1.6"/>
+      </g>
+      <rect x="16" y="15" width="34.4" height="5" rx="1.5" fill="var(--akzent-text)"/>
+      <circle cx="25.6" cy="35" r="4" fill="var(--akzent-text)"/><circle cx="33.2" cy="25" r="4" fill="var(--akzent-text)"/><circle cx="48.4" cy="45" r="4" fill="var(--akzent-text)"/>
+    </svg>
+    <div>
+      <h1>Chords for Beginners</h1>
+      <p class="untertitel">Einfache Akkordfolgen für Gitarre und Ukulele</p>
+    </div>
+  </div>
+  <div class="kopf-rechts">
+    <div class="segment" id="instrument" role="radiogroup" aria-label="Instrument">
+      <button type="button" role="radio" data-wert="gitarre">Gitarre</button>
+      <button type="button" role="radio" data-wert="ukulele">Ukulele</button>
+    </div>
+    <button type="button" id="stimmen-knopf" class="icon-knopf" aria-label="Stimmgerät öffnen" title="Stimmgerät">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 2.5v7.5a3.5 3.5 0 0 0 7 0V2.5M12 13.5v8"/></svg>
+    </button>
+    <button type="button" id="thema" class="icon-knopf" aria-label="Hell oder dunkel umschalten" title="Hell oder dunkel">
+      <svg class="sonne" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>
+      <svg class="mond" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+    </button>
+  </div>
+</header>
+
+<nav class="tabs" role="tablist">
+  <button type="button" role="tab" data-tab="folgen"><span class="nur-breit">Akkordfolgen</span><span class="nur-schmal">Folgen</span></button>
+  <button type="button" role="tab" data-tab="tonart"><span class="nur-breit">Griffe einer </span>Tonart</button>
+  <button type="button" role="tab" data-tab="akkord"><span class="nur-breit">Einzelner </span>Akkord</button>
+  <button type="button" role="tab" data-tab="rhythmus">Rhythmus</button>
+</nav>
+
+<main>
+  <!-- ===================================================== Akkordfolgen -->
+  <section id="tab-folgen" class="tab-inhalt">
+   <div id="folgen-liste-ansicht">
+    <div class="filter karte">
+      <div class="feld"><span>Sammlung</span>
+        <div class="segment klein" id="f-sammlung" role="radiogroup" aria-label="Sammlung">
+          <button type="button" role="radio" data-wert="alle">alle</button>
+          <button type="button" role="radio" data-wert="eigene">Eigene</button>
+        </div>
+      </div>
+      <div class="feld"><span>Tonart</span>
+        <div class="segment klein" id="f-grundton" role="radiogroup" aria-label="Tonart"></div>
+      </div>
+      <p class="leicht-hinweis" id="f-leicht"></p>
+    </div>
+    <div class="liste-kopf">
+      <span id="treffer"></span>
+      <span class="liste-aktionen">
+        <button type="button" id="f-neu" class="knopf klein">+ Eigene Akkordfolge</button>
+      </span>
+    </div>
+    <div id="eigene-werkzeuge"></div>
+    <div id="liste" class="liste"></div>
+   </div>
+   <div id="folgen-detail-ansicht" hidden></div>
+   <div id="folgen-editor-ansicht" hidden></div>
+   <input type="file" id="import-datei" accept="application/json,.json" hidden>
+  </section>
+
+  <!-- ===================================================== Griffe einer Tonart -->
+  <section id="tab-tonart" class="tab-inhalt" hidden>
+    <div class="filter karte">
+      <div class="feld"><span>Tonart</span>
+        <div class="segment klein" id="t-grundton" role="radiogroup" aria-label="Tonart"></div>
+      </div>
+      <p class="leicht-hinweis" id="t-leicht"></p>
+    </div>
+    <div class="karte tonart-kopf">
+      <div><h2 id="t-titel"></h2><p id="t-leiter" class="leise"></p></div>
+      <div class="feld breit"><span>Diese Akkorde zeigen</span><div id="t-akkorde" class="chips"></div></div>
+    </div>
+    <div id="t-griffe"></div>
+  </section>
+
+  <!-- ===================================================== Einzelner Akkord -->
+  <section id="tab-akkord" class="tab-inhalt" hidden>
+    <div class="filter karte akkord-wahl">
+      <div class="feld breit"><span>Grundton</span><div id="a-grundton" class="chips"></div></div>
+      <div class="feld breit"><span>Art</span><div id="a-typ" class="chips"></div></div>
+    </div>
+    <div id="a-ergebnis"></div>
+  </section>
+
+  <!-- ===================================================== Rhythmus: Schlag- und Zupfmuster -->
+  <section id="tab-rhythmus" class="tab-inhalt" hidden>
+    <div class="karte rhythmus-kopf">
+      <h2>Schlag- und Zupfmuster</h2>
+      <p>Hier übst du jedes Muster auf einem Akkord oder auf der Pop-Folge in der leichtesten Tonart deines Instruments. Das Muster, das du zuletzt angehört hast, spielt auch auf den Seiten der Akkordfolgen.</p>
+      <div class="filter innen">
+        <div class="feld breit"><span>Üben mit</span><div id="r-akkord" class="chips"></div></div>
+        <div class="feld"><span>Tempo</span><label class="tempo"><input type="range" id="r-tempo" min="50" max="160" step="5" aria-label="Tempo"><span id="r-tempo-wert"></span></label></div>
+      </div>
+    </div>
+    <div id="r-muster" class="muster-liste"></div>
+    <details class="karte schrift-hilfe" id="r-hilfe" open>
+      <summary>So liest du die Muster</summary>
+      <div id="r-legende"></div>
+      <p class="leise klein-text">Zähl beim Üben laut mit: „eins und zwei und drei und vier und“. Abschläge liegen auf den Zahlen, Aufschläge auf dem „und“. Die Schlaghand geht immer im gleichen Takt auf und ab, auch wenn sie mal nicht trifft. Fang langsam an und werde erst schneller, wenn der Wechsel der Akkorde sitzt.</p>
+    </details>
+  </section>
+</main>
+
+<footer class="fuss">
+  <p>Griffe aus „Akkordfolgen für Songwriter“. Jeder Griff ist auf die richtigen Akkordtöne geprüft und braucht höchstens vier Finger. Songbeispiele nach Hooktheory, Wikipedia und Musikschul-Seiten, Stand November 2026.</p>
+  <p id="offline-status" class="leise"></p>
+  <p id="install-zeile" hidden><button type="button" class="link-knopf" id="install-oeffnen">Chords for Beginners als App installieren</button></p>
+</footer>
+
+<!-- ===================================================== Hinweis zum Installieren (iPhone, iPad, Android) -->
+<aside id="install-hinweis" class="install-hinweis" aria-labelledby="ih-titel" hidden>
+  <img class="ih-icon" src="icons/icon.svg" alt="" width="44" height="44">
+  <div class="ih-text">
+    <h2 id="ih-titel">Als App installieren</h2>
+    <p id="ih-nutzen"></p>
+    <ol id="ih-schritte"></ol>
+    <p id="ih-notiz" class="leise" hidden></p>
+    <button type="button" class="knopf" id="ih-installieren" hidden>Installieren</button>
+  </div>
+  <button type="button" class="icon-knopf ih-zu" id="ih-zu" aria-label="Hinweis schließen" title="Schließen">×</button>
+</aside>
+
+<!-- ===================================================== Stimmgerät (eigenes Fenster) -->
+<div id="stimmgeraet" class="vollbild" role="dialog" aria-modal="true" aria-labelledby="sg-titel" hidden>
+  <div class="vollbild-innen">
+    <div class="ansicht-kopf">
+      <button type="button" class="zurueck" id="sg-zurueck">‹ Zurück</button>
+      <h2 class="ansicht-titel" id="sg-titel">Stimmgerät</h2>
+    </div>
+
+    <div class="segment sg-inst" id="sg-inst" role="radiogroup" aria-label="Was stimmst du?">
+      <button type="button" role="radio" data-wert="gitarre">Gitarre</button>
+      <button type="button" role="radio" data-wert="ukulele">Ukulele</button>
+      <button type="button" role="radio" data-wert="frei">Frei</button>
+    </div>
+
+    <div class="sg-zeile">
+      <label class="feld" id="sg-stimmung-feld"><span>Stimmung</span><select id="sg-stimmung"></select></label>
+      <div class="feld sg-kt-feld">
+        <div class="sg-kt-kopf">
+          <span>Kammerton A4</span>
+          <button type="button" class="knopf zweit klein" id="sg-kt-spielen" aria-pressed="false"></button>
+        </div>
+        <div class="sg-kt">
+          <button type="button" class="icon-knopf klein" id="sg-kt-minus" aria-label="Kammerton 1 Hz tiefer">−</button>
+          <input type="range" id="sg-kt" min="430" max="450" step="1" aria-label="Kammerton in Hertz">
+          <button type="button" class="icon-knopf klein" id="sg-kt-plus" aria-label="Kammerton 1 Hz höher">+</button>
+          <output id="sg-kt-wert" for="sg-kt">440 Hz</output>
+          <button type="button" class="knopf zweit mini" id="sg-kt-reset" hidden>auf 440</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="karte sg-anzeige still" id="sg-anzeige">
+      <svg class="sg-skala" id="sg-skala" viewBox="0 0 260 142" aria-hidden="true"></svg>
+      <div class="sg-ton" id="sg-ton">–</div>
+      <div class="sg-status" id="sg-status" aria-live="polite"></div>
+      <div class="sg-info" id="sg-info"></div>
+      <div class="sg-pegel" title="Lautstärke am Mikrofon"><i id="sg-pegel"></i></div>
+      <div class="sg-saiten-feld" id="sg-saiten-feld">
+        <div class="chips sg-saiten" id="sg-saiten"></div>
+        <p class="leise klein-text">Tippe auf eine Saite: Du hörst ihren Ton, und das Stimmgerät achtet nur noch auf sie. „Auto“ erkennt die Saite selbst.</p>
+      </div>
+    </div>
+
+    <div class="sg-mikro">
+      <button type="button" class="knopf" id="sg-mikro">Mikrofon starten</button>
+      <p class="leise klein-text" id="sg-hinweis"></p>
+    </div>
+  </div>
+</div>
+
+<script src="daten.js"></script>
+<script src="musik.js"></script>
+<script src="folgen.js"></script>
+<script src="muster.js"></script>
+<script src="stimmen.js"></script>
+<script src="installieren.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
