@@ -218,8 +218,12 @@ var SC = (function () {
     var gx = (W - gw) / 2 + 5, my = 8, gy = 18;
     var rad = Math.min(sp * 0.38, fh * 0.36);
     var base = startBund(frets);
+    var unten = opts.unten && opts.unten.some(Boolean) ? opts.unten : null;   // Zeichen unter den Saiten (p i m a, B, W)
     var o = [];
-    o.push('<svg class="griffbild" viewBox="0 0 ' + W + ' ' + (gy + nf * fh + 4) + '" role="img" aria-label="' + (opts.label || 'Griff') + ' ' + fs(frets) + '">');
+    o.push('<svg class="griffbild" viewBox="0 0 ' + W + ' ' + (gy + nf * fh + (unten ? 16 : 4)) + '" role="img" aria-label="' + (opts.label || 'Griff') + ' ' + fs(frets) + '">');
+    if (unten) unten.forEach(function (t, s) {
+      if (t) o.push('<text class="gb-rolle" x="' + (gx + s * sp) + '" y="' + (gy + nf * fh + 12) + '">' + t + '</text>');
+    });
     for (var s = 0; s < n; s++) {
       var x = gx + s * sp;
       o.push('<line class="gb-l" x1="' + x + '" y1="' + gy + '" x2="' + x + '" y2="' + (gy + nf * fh) + '"/>');

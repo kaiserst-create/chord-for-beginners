@@ -1,5 +1,5 @@
 // Chords for Beginners: Oberfläche
-// Aufbau wie app.js von „Songwriting & Chords“, abgespeckt: elf Folgen, sieben Tonarten, nur Grundgriffe,
+// Aufbau wie app.js von „Songwriting & Chords“, abgespeckt: zwölf Folgen, sieben Tonarten, nur Grundgriffe,
 // keine Favoriten und keine Filtermenüs. Neu sind die Genre-Hinweise und die Schlag- und Zupfmuster.
 (function () {
   'use strict';
@@ -17,10 +17,10 @@
   // ------------------------------------------------------------------ Zustand (bleibt im Browser gespeichert)
   var S = {
     instrument: 'gitarre', tab: 'folgen',
-    sammlung: 'alle', grundton: 0, tempo: 80, schleife: false, muster: M.STANDARD,
-    tGrundton: 0, tAus: {},
-    aGrundton: 0, aTyp: '',
-    rAkkord: 'C',
+    sammlung: 'alle', grundton: 7, tempo: 80, schleife: false, muster: M.STANDARD,
+    tGrundton: 7, tAus: {},
+    aGrundton: 7,
+    rAkkord: 'folge',
     stInst: 'gitarre', stGit: 'standard', stUke: 'standard', kammerton: 440,
     installZu: false,   // Hinweis zum Installieren geschlossen
   };
@@ -38,10 +38,10 @@
   nurAus('instrument', ['gitarre', 'ukulele']);
   nurAus('tab', ['folgen', 'tonart', 'akkord', 'rhythmus']);
   nurAus('sammlung', ['alle', 'eigene']);
-  ['grundton', 'tGrundton', 'aGrundton'].forEach(function (k) { nurAus(k, GT); });
-  nurAus('aTyp', ['', 'm', '7', 'm7']);
+  // beim ersten Öffnen und bei unbrauchbaren Werten: G-Dur, die leichteste Tonart auf der Gitarre
+  ['grundton', 'tGrundton', 'aGrundton'].forEach(function (k) { if (GT.indexOf(S[k]) < 0) S[k] = 7; });
   if (S.rAkkord === 'C G Am F') S.rAkkord = 'folge';   // ältere Fassung
-  nurAus('rAkkord', UEBEN);
+  if (UEBEN.indexOf(S.rAkkord) < 0) S.rAkkord = 'folge';
   if (!M.muster(S.muster)) S.muster = M.STANDARD;
   ganzzahl('tempo', 50, 160, 80);
   function speichern() { try { localStorage.setItem('cfb-zustand', JSON.stringify(S)); } catch (e) { /* egal */ } }
@@ -122,7 +122,6 @@
   }
   var ICON_PLAY = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg>';
   var ICON_STOP = '<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="3.5" width="9" height="9" rx="1.5"/></svg>';
-  var ICON_TON = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h3l4-3.5v11L5 10H2z"/><path d="M11 5.5a3.5 3.5 0 0 1 0 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>';
   var LEGENDE = function () { return '<p class="leise klein-text" style="margin-top:12px">Saiten von links: ' + SC.SAITEN[S.instrument] + ' · x = nicht spielen · o = leere Saite · Zahl links = Bund · Griffbild antippen zum Anhören</p>'; };
 
   function griff(name) { return SC.grundgriff(S.instrument, name); }
@@ -132,12 +131,29 @@
   function griffHtml(name, v, opts) {
     opts = opts || {};
     if (!v) return '<div class="griff"><div class="griff-name">' + esc(name) + '</div><p class="leise">kein Griff gefunden</p></div>';
-    var h = '<div class="griff' + (SC.imBereich(name) ? '' : ' fremd') + '">';
-    h += '<div class="griff-name">' + esc(name) + (opts.klingt ? '<span class="klingt">klingt als ' + esc(opts.klingt) + '</span>' : '') + '</div>';
-    h += '<button type="button" class="griff-bild" data-spiel="' + fretAttr(v.f) + '" title="Anhören">' + SC.svg(v.f, { label: name }) + '</button>';
+    var h = '<div class="griff' + (SC.imBereich(name) ? '' : ' fremd') + (opts.klein ? ' klein' : '') + '"' + (opts.rIndex !== undefined ? ' data-r-griff="' + opts.rIndex + '"' : '') + '>';
+    h += '<div class="griff-name">' + esc(name) + (opts.klingt ? '<span class="klingt">' + esc(opts.klingt) + '</span>' : '') + '</div>';
+    h += '<button type="button" class="griff-bild" data-spiel="' + fretAttr(v.f) + '" title="Anhören">' + SC.svg(v.f, { label: name, unten: opts.muster ? rollen(opts.muster, v.f) : null }) + '</button>';
     h += '<div class="griff-tab">' + SC.fs(v.f) + '</div>';
     h += '<div class="griff-quelle">' + (opts.stufe ? '<span class="roem">' + esc(opts.stufe) + '</span> · ' : '') + esc(v.q) + '</div>';
+    if (opts.info) h += '<div class="griff-info">' + esc(opts.info) + '</div>';
     return h + '</div>';
+  }
+  // Wer schlägt welche Saite an? Für Muster mit Basston oder Fingern: B, W, p, i, m, a unter den Saiten
+  function rollen(m, frets) {
+    var out = frets.map(function () { return ''; });
+    M.schritte(m).forEach(function (c) {
+      if ('BWpima'.indexOf(c) < 0) return;
+      var x = M.ton(c, frets, S.instrument, false), s = x ? x.f.findIndex(function (v) { return v !== null; }) : -1;
+      if (s >= 0 && out[s].indexOf(c) < 0) out[s] += c;
+    });
+    return out;
+  }
+  function rollenText(m) {
+    var z = M.schritte(m).join('');
+    if (/[pima]/.test(z)) return 'Unter den Saiten steht, welcher Finger zupft: p Daumen, i Zeige-, m Mittel-, a Ringfinger.';
+    if (/[BW]/.test(z)) return 'Unter den Saiten steht, wo der Daumen den Bass spielt: B Grundton' + (/W/.test(z) ? ', W Wechselbass.' : '.');
+    return 'Abschläge gehen über alle Saiten, die im Griff klingen' + (/U/.test(z) ? ', Aufschläge meist nur über die hohen.' : '.');
   }
   function spieleString(s) {
     SC.Klang.anschlag(s.split(',').map(function (x) { return x === 'x' ? null : parseInt(x, 10); }), S.instrument, 0);
@@ -366,7 +382,8 @@
 
     var namen = unique(klang);
     h += '<div class="griffe-kopf"><h3>Griffe für ' + inst + '</h3></div>';
-    h += '<div class="griffe">' + namen.map(function (n) { return griffHtml(n, griff(n)); }).join('') + '</div>';
+    h += '<div class="griffe">' + namen.map(function (n) { return griffHtml(n, griff(n), { muster: m }); }).join('') + '</div>';
+    if (/[BWpima]/.test(m.folge)) h += '<p class="leise klein-text">' + esc(rollenText(m)) + '</p>';
     h += fremdHinweis(namen, true);
     h += kapoTipp();
     h += LEGENDE();
@@ -412,6 +429,7 @@
   var spiel = { an: false, timer: 0, raf: 0, i: 0, zeit: 0, plan: [], o: {}, zeigt: '', vorher: null };
   function markiere(i) {
     document.querySelectorAll('.seq-akkord[data-seq]').forEach(function (x) { x.classList.toggle('spielt', spiel.o.seq === true && +x.dataset.seq === i); });
+    document.querySelectorAll('.griff[data-r-griff]').forEach(function (x) { x.classList.toggle('spielt', spiel.o.griffe === true && +x.dataset.rGriff === i); });
   }
   function markiereSchlag(k) {
     document.querySelectorAll('[data-muster-zeile] .schlag').forEach(function (x) {
@@ -642,7 +660,9 @@
     var meldung = '';
     if (!liste.length) meldung = 'Gib mindestens einen Akkord ein.';
     else if (unbekannt.length) meldung = 'Diese Eingabe verstehe ich nicht: ' + unbekannt.map(function (r) { return r.roh; }).join(', ') + '. Schreib Akkorde wie C, Am, G7 oder Stufen wie I, vi, V7.';
-    else if (fremd.length) meldung = fremd.map(function (r) { return r.roh; }).join(', ') + (fremd.length === 1 ? ' passt' : ' passen') + ' nicht in diese App. ' + erlaubtText(k);
+    else if (fremd.length) meldung = fremd.map(function (r) { return r.roh; }).join(', ') + (fremd.length === 1 ? ' passt' : ' passen') + ' nicht in diese App. ' + erlaubtText(k) +
+      // englische Schreibweise aus Songbüchern: B ist dort unser H
+      (fremd.some(function (r) { return /^B(?!b|♭|es)/.test(r.roh); }) ? ' Auf Deutsch heißt der Ton B hier H, also zum Beispiel Hm statt Bm und H7 statt B7.' : '');
     if (meldung) { fehlerEl.textContent = meldung; fehlerEl.hidden = false; return; }
     fehlerEl.hidden = true;
     var titel = E.titel.trim() || ('Eigene Akkordfolge ' + (eigene.length + 1));
@@ -696,29 +716,26 @@
   });
   $('#t-griffe').addEventListener('click', function (e) { griffKlick(e); });
 
-  // ------------------------------------------------------------------ Einzelner Akkord: C D E F G A als Dur, Moll, 7 und m7
+  // ------------------------------------------------------------------ Einzelner Akkord: nach dem Grundton alle vier Arten (Dur, Moll, 7, m7)
   var A_TYPEN = ['', 'm', '7', 'm7'];
-  var A_BESCHREIBUNG = { '': 'Dur-Dreiklang', 'm': 'Moll-Dreiklang', '7': 'Dur mit kleiner Septime (Dur7)', 'm7': 'Moll mit kleiner Septime (Moll7)' };
+  var A_BESCHREIBUNG = { '': 'Dur-Dreiklang', 'm': 'Moll-Dreiklang', '7': 'Dur mit kleiner Septime', 'm7': 'Moll mit kleiner Septime' };
   function renderAkkord() {
     var root = SC.PC_NAME[S.aGrundton];
     $('#a-grundton').innerHTML = GT.map(function (pc) {
       return '<button type="button" class="chip gross" data-a-root="' + pc + '" aria-pressed="' + (pc === S.aGrundton) + '">' + SC.PC_NAME[pc] + '</button>';
     }).join('');
-    $('#a-typ').innerHTML = A_TYPEN.map(function (t) {
-      return '<button type="button" class="chip gross" data-a-typ="' + esc(t) + '" aria-pressed="' + (t === S.aTyp) + '" title="' + esc(A_BESCHREIBUNG[t]) + '">' + esc(root + t) + '<small>' + SC.TYPE_NAMES[t] + '</small></button>';
-    }).join('');
-    var name = root + S.aTyp, v = griff(name);
-    var h = '<div class="karte akkord-ergebnis"><div class="reihe-kopf"><h2>' + esc(name) + '</h2>' +
-      '<span class="leise">' + esc(A_BESCHREIBUNG[S.aTyp]) + ' · Akkordtöne: ' + esc(SC.akkordToene(name).join(' ')) + '</span>' +
-      (v ? '<button type="button" class="knopf zweit" data-spiel="' + fretAttr(v.f) + '">' + ICON_TON + 'anhören</button>' : '') + '</div>';
-    h += '<div class="griffe einzeln">' + griffHtml(name, v) + '</div>';
+    var h = '<div class="karte akkord-ergebnis"><div class="reihe-kopf"><h2>Akkorde auf ' + esc(root) + '</h2>' +
+      '<span class="leise">Dur, Moll, Dur7 und Moll7 für ' + instName() + '</span></div>';
+    h += '<div class="griffe akkord-vier">' + A_TYPEN.map(function (t) {
+      var name = root + t;
+      return griffHtml(name, griff(name), { klingt: SC.TYPE_NAMES[t], info: A_BESCHREIBUNG[t] + ' · Töne: ' + SC.akkordToene(name).join(' ') });
+    }).join('') + '</div>';
     h += LEGENDE() + '</div>';
     $('#a-ergebnis').innerHTML = h;
   }
   $('#tab-akkord').addEventListener('click', function (e) {
     var b;
     if ((b = e.target.closest('[data-a-root]'))) { S.aGrundton = +b.dataset.aRoot; speichern(); renderAkkord(); return; }
-    if ((b = e.target.closest('[data-a-typ]'))) { S.aTyp = b.dataset.aTyp; speichern(); renderAkkord(); return; }
     griffKlick(e);
   });
 
@@ -740,7 +757,7 @@
         schriftHtml(m, 'r-' + m.id) +
         '<p>' + esc(m.text) + '</p>' +
         '<p class="mk-genre"><b>Wo du es hörst:</b> ' + esc(m.genre) + '</p>' +
-        (gewaehlt ? '' : '<button type="button" class="link-knopf" data-r-waehle="' + m.id + '">für die Akkordfolgen nehmen</button>') +
+        (gewaehlt ? griffeImMuster(m) : '<button type="button" class="link-knopf" data-r-waehle="' + m.id + '">für die Akkordfolgen nehmen</button>') +
         '</article>';
     }).join('');
     $('#r-legende').innerHTML = '<dl class="legende">' + M.legende(S.instrument).map(function (x) {
@@ -758,7 +775,8 @@
       if (lief) ueben(lief);
       return;
     }
-    if ((b = e.target.closest('[data-r-waehle]'))) { S.muster = b.dataset.rWaehle; speichern(); renderRhythmus(); return; }
+    if ((b = e.target.closest('[data-r-waehle]'))) { S.muster = b.dataset.rWaehle; speichern(); stoppen(); renderRhythmus(); return; }
+    if (griffKlick(e)) return;
     if ((b = e.target.closest('[data-r-spiel]'))) {
       var id = b.dataset.rSpiel;
       if (spiel.an && spiel.o.knopf === 'r-' + id) { stoppen(); return; }
@@ -766,6 +784,13 @@
       ueben(id);
     }
   });
+  // Griffbilder der Übungsakkorde im gewählten Muster, mit B, W bzw. p i m a unter den Saiten
+  function griffeImMuster(m) {
+    var namen = uebenNamen(S.rAkkord);
+    return '<div class="mk-griffe"><h4>Griffe für ' + instName() + '</h4><div class="griffe">' +
+      namen.map(function (n, i) { return griffHtml(n, griff(n), { klein: true, muster: m, rIndex: i }); }).join('') +
+      '</div><p class="leise klein-text">' + esc(rollenText(m)) + ' Griffbild antippen zum Anhören.</p></div>';
+  }
   function uebenNamen(a) {
     if (a !== 'folge') return [a];
     var k = SC.key(LEICHT[S.instrument]);
@@ -773,7 +798,7 @@
   }
   function ueben(id) {
     var namen = uebenNamen(S.rAkkord);
-    spielSequenz(namen.map(griff), { muster: M.muster(id), beats: 4, zeile: 'r-' + id, knopf: 'r-' + id, schleife: true });
+    spielSequenz(namen.map(griff), { muster: M.muster(id), beats: 4, zeile: 'r-' + id, knopf: 'r-' + id, schleife: true, griffe: true });
   }
 
   // ------------------------------------------------------------------ Start

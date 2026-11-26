@@ -1,8 +1,9 @@
-// Chords for Beginners: die elf Akkordfolgen
+// Chords for Beginners: die zwölf Akkordfolgen
 //
 // Jede Folge steht als Stufen in Dur, die App setzt sie in die Tonarten C, D, E, F, G und A.
-// Die ersten sieben stammen aus dem Bild des Nutzers, die letzten vier aus „Songwriting & Chords“
-// (web/folgen.js: Doo-Wop-Folge, Pop-Loop, Rock’n’Roll-Loop, 12-Takt-Blues).
+// Die ersten sieben stammen aus dem Bild des Nutzers, dazu vier aus „Songwriting & Chords“
+// (web/folgen.js: Doo-Wop-Folge, Pop-Loop, Rock’n’Roll-Loop, 12-Takt-Blues) und die Folge aus
+// „Knockin’ on Heaven’s Door“ (Wunsch des Nutzers; Am ist in G-Dur die Stufe ii).
 // stimmung: deutsche Etiketten (im Bild englisch: Happy, Joyful, Dark, Pop, Emotional, Sad, Powerful,
 //   bei den übernommenen Folgen wie in der Songwriting-App)
 // genre: wo die Folge oft vorkommt, mit Songbeispielen. Recherchiert am 25.11.2026, Quellen stehen in README.md:
@@ -55,6 +56,10 @@ var SC_FOLGEN = (function () {
   f('rocknroll', 'Rock’n’Roll-Loop', 'I IV V IV', ['fröhlich', 'kraftvoll'],
     'Drei Akkorde, die hin und zurück pendeln: das Gerüst vieler Rock’n’Roll- und Rocksongs, auch im Reggae-Pop. ' +
     'Laut Hooktheory trägt die Folge „Wild Thing“ von The Troggs, den Refrain von „Everybody Talks“ von Neon Trees und „Cheerleader“ von OMI.');
+  f('heavensdoor', 'Heaven’s-Door-Folge', 'I V ii I V IV', ['entspannt', 'melancholisch'],
+    'Bob Dylan schrieb „Knockin’ on Heaven’s Door“ 1973 für den Western „Pat Garrett and Billy the Kid“, Wikipedia ordnet den Song Folk-Rock und Gospel zu. ' +
+    'Die Folge pendelt zweimal zwischen I und V und landet einmal auf der Moll-Stufe ii, einmal auf der IV: in G-Dur also G, D, Am und G, D, C. ' +
+    'Bekannte Fassungen stammen von Eric Clapton (1975) und Guns N’ Roses (1992).', { quelle: 'Wikipedia und Hooktheory' });
   f('blues12', '12-Takt-Blues', 'I7 I7 I7 I7 IV7 IV7 I7 I7 V7 IV7 I7 V7', ['groovig', 'entspannt'],
     'Das Grundschema des Blues: zwölf Takte, drei Septakkorde, ein Akkord pro Takt. ' +
     'Daraus wuchsen Rhythm and Blues, Boogie-Woogie, Rock’n’Roll und Blues-Rock, im Jazz ist es die Form vieler Bebop-Stücke wie „Billie’s Bounce“ von Charlie Parker. ' +

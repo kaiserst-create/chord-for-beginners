@@ -1,7 +1,7 @@
 // Prüft „Chords for Beginners“ nach dem Vorbild von skripte/web_pruefen.js der Songwriting-App:
 //  1. jeden Grundgriff in daten.js (richtige Töne, Grundton im Bass, Spannweite, höchstens vier Finger)
 //  2. die 28 Akkorde der App (C D E F G A H als Dur, Moll, 7, m7): Griff und Akkordtöne
-//  3. die elf Folgen in allen 7 Tonarten: Akkordnamen wie im Bild bzw. in der Songwriting-App, deutsche Namen, Griffe,
+//  3. die zwölf Folgen in allen 7 Tonarten: Akkordnamen wie im Bild bzw. in der Songwriting-App, deutsche Namen, Griffe,
 //     Akkorde außerhalb der 28, Stufen und Umrechnung, Genre-Hinweise
 //  4. die Schlag- und Zupfmuster: Schreibweise, Länge, welche Saiten jedes Zeichen anschlägt
 //  5. die Tonerkennung des Stimmgeräts mit erzeugten Saitenklängen (höchstens 1 Cent daneben), FEDER = 7, Reihenfolge
@@ -83,16 +83,17 @@ function run() {
   for (const name of ['H', 'Hm', 'H7', 'Hm7']) if (!SC.imBereich(name)) melde(name + ' fehlt im Akkord-Bereich');
   out.push(bereich.length + ' Akkorde im Akkord-Bereich geprüft');
 
-  // ---------------------------------------------------------------- 3. die elf Folgen in allen Tonarten
+  // ---------------------------------------------------------------- 3. die zwölf Folgen in allen Tonarten
   const BILD = {   // die ersten sieben wie im Bild des Nutzers, die übrigen wie in der Songwriting-App, alle in C-Dur
     happy: ['C-F-G-C', 'I IV V I', 'fröhlich'], joyful: ['C-G-Am-F', 'I V vi IV', 'freudig'], dark: ['F-C-Am-Em', 'IV I vi iii', 'düster'],
     pop: ['F-Am-G-C', 'IV vi V I', 'poppig'], emotional: ['F-C-Am-G', 'IV I vi V', 'emotional'], sad: ['Dm-Am-F-G', 'ii vi IV V', 'traurig'],
     powerful: ['F-G-Am-G', 'IV V vi V', 'kraftvoll'],
     doowop: ['C-Am-F-G', 'I vi IV V', 'romantisch,eingängig'], poploop: ['C-F-Am-G', 'I IV vi V', 'fröhlich,eingängig'],
     rocknroll: ['C-F-G-F', 'I IV V IV', 'fröhlich,kraftvoll'],
+    heavensdoor: ['C-G-Dm-C-G-F', 'I V ii I V IV', 'entspannt,melancholisch'],   // „Knockin’ on Heaven’s Door“, im Original G D Am / G D C
     blues12: ['C7-C7-C7-C7-F7-F7-C7-C7-G7-F7-C7-G7', 'I7 I7 I7 I7 IV7 IV7 I7 I7 V7 IV7 I7 V7', 'groovig,entspannt'],
   };
-  if (F.folgen.map(f => f.id).join(' ') !== Object.keys(BILD).join(' ')) melde('Folgen: ' + F.folgen.map(f => f.id).join(' ') + ' statt der elf vorgesehenen');
+  if (F.folgen.map(f => f.id).join(' ') !== Object.keys(BILD).join(' ')) melde('Folgen: ' + F.folgen.map(f => f.id).join(' ') + ' statt der zwölf vorgesehenen');
   // Akkorde außerhalb der 28, die in den Folgen vorkommen (je Tonart)
   const FREMD_SOLL = { 0: '', 2: 'F#m', 4: 'C#m G#m F#m', 5: 'B♭ B♭7', 7: '', 9: 'F#m C#m', 11: 'C#m D#m F# G#m F#7' };
   const DEUTSCH = /^(C|C#|D|D#|E♭|E|F|F#|G|G#|A♭|A|B♭|H)(m|7|m7)?$/;
@@ -134,7 +135,7 @@ function run() {
   }
   // Stichproben in anderen Tonarten
   const PROBE = [['joyful', 2, 'D-A-Hm-G'], ['dark', 4, 'A-E-C#m-G#m'], ['sad', 5, 'Gm-Dm-B♭-C'], ['powerful', 9, 'D-E-F#m-E'], ['happy', 7, 'G-C-D-G'],
-    ['doowop', 9, 'A-F#m-D-E'], ['rocknroll', 4, 'E-A-H-A'], ['joyful', 11, 'H-F#-G#m-E'], ['sad', 11, 'C#m-G#m-E-F#'], ['blues12', 5, 'F7-F7-F7-F7-B♭7-B♭7-F7-F7-C7-B♭7-F7-C7']];
+    ['heavensdoor', 7, 'G-D-Am-G-D-C'], ['doowop', 9, 'A-F#m-D-E'], ['rocknroll', 4, 'E-A-H-A'], ['joyful', 11, 'H-F#-G#m-E'], ['sad', 11, 'C#m-G#m-E-F#'], ['blues12', 5, 'F7-F7-F7-F7-B♭7-B♭7-F7-F7-C7-B♭7-F7-C7']];
   for (const [id, pc, soll] of PROBE) {
     const f = F.folgen.find(x => x.id === id);
     if (F.akkorde(f, pc).join('-') !== soll) melde('Folge ' + id + ' in ' + SC.key(pc).name + ': ' + F.akkorde(f, pc).join('-') + ' statt ' + soll);
@@ -159,6 +160,18 @@ function run() {
   if (/kapo['"]|S\.kapo|tKapo|id="[a-z-]*kapo|data-kapo/i.test(appJs + lies(basis + '/index.html'))) melde('Kapo lässt sich noch einstellen');
   if (!/function kapoTipp\(\)/.test(appJs) || (appJs.match(/kapoTipp\(\)/g) || []).length < 3) melde('Erklärung zum Kapo fehlt auf der Seite einer Folge oder im Reiter Tonart');
   if (!/var LEICHT = \{ gitarre: 7, ukulele: 0 \};/.test(appJs)) melde('Leichteste Tonart ist nicht G-Dur (Gitarre) und C-Dur (Ukulele)');
+  if (!/if \(F\.folgen\.some\(function \(x\) \{ return x\.id === id; \}\)\) id = 'eigen-' \+ id;/.test(appJs)) melde('Import: eigene Folge kann eine Katalog-Folge verdecken');
+  if (!/Slash-Akkorde wie C\/E/.test(appJs)) melde('Editor: Slash-Akkorde gelten als unbekannt statt als nicht dabei');
+  // Start beim ersten Öffnen: Gitarre und G-Dur in Liste, Tonart und Akkord, Üben mit der Pop-Folge in G
+  if (!/instrument: 'gitarre'/.test(appJs) || !/grundton: 7,/.test(appJs) || !/tGrundton: 7,/.test(appJs) || !/aGrundton: 7,/.test(appJs) || !/rAkkord: 'folge'/.test(appJs)) melde('Start: nicht Gitarre und G-Dur');
+  if (!/if \(GT\.indexOf\(S\[k\]\) < 0\) S\[k\] = 7;/.test(appJs)) melde('Start: unbrauchbare Tonart fällt nicht auf G-Dur zurück');
+  // Reiter Rhythmus: Griffbilder im gewählten Muster, mit Zeichen unter den Saiten
+  if (!/gewaehlt \? griffeImMuster\(m\)/.test(appJs) || !/griffe: true \}/.test(appJs)) melde('Rhythmus: Griffbilder im gewählten Muster fehlen');
+  const bildPima = SC.svg(SC.grundgriff('gitarre', 'C').f, { unten: ['', 'p', '', 'i', 'm', 'a'] });
+  if ((bildPima.match(/class="gb-rolle"/g) || []).length !== 4 || !/viewBox="0 0 100 121.5"/.test(bildPima)) melde('Griffbild: Zeichen unter den Saiten fehlen');
+  if (/gb-rolle/.test(SC.svg(SC.grundgriff('gitarre', 'C').f, { unten: ['', '', '', '', '', ''] }))) melde('Griffbild: leere Zeichenzeile wird gezeichnet');
+  // Reiter Akkord: nach dem Grundton alle vier Arten, keine Auswahl der Art
+  if (/a-typ|aTyp/.test(appJs + lies(basis + '/index.html')) || !/class="griffe akkord-vier"/.test(appJs)) melde('Reiter Akkord: nicht alle vier Arten auf einmal');
   if (!/var UEBEN = \[[^\]]*'folge'\]/.test(appJs) || /'C G Am F'\]/.test(appJs)) melde('Rhythmus: Übungsfolge hängt nicht von der leichtesten Tonart ab');
   for (const id of ['f-grundton', 't-grundton', 'e-grundton']) if (appJs.indexOf("markiereLeicht($('#" + id + "')") < 0) melde('Leichteste Tonart bei ' + id + ' nicht markiert');
   // in der leichtesten Tonart braucht keine Folge einen Akkord außerhalb des Bereichs

@@ -2,7 +2,7 @@
 // Übernommen aus „Akkordfolgen für Songwriter“ (skripte/griffe_gitarre.py, skripte/griffe_ukulele.py), nur Dur, Moll, 7 und m7.
 // Griffschrift von der tiefsten Saite aus, x = nicht spielen. skripte/pruefen.js prüft jeden Griff.
 var SC_DATEN = {
- "stand": "2026-11-25",
+ "stand": "2026-11-26",
  "gitarre": {
   "typen": ["", "m", "7", "m7"],
   "griffe": {

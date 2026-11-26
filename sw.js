@@ -7,7 +7,7 @@
 // Speicher. Deshalb löscht dieser Service Worker nur eigene Speicher (cfb-…) und füllt seinen eigenen
 // wieder auf, falls eine andere App ihn gelöscht hat.
 
-var VERSION = 'cfb-2026-11-26-1';
+var VERSION = 'cfb-2026-11-26-5';
 var DATEIEN = [
   './', 'index.html', 'style.css', 'daten.js', 'musik.js', 'folgen.js', 'muster.js', 'stimmen.js', 'installieren.js', 'app.js', 'manifest.webmanifest',
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/apple-touch-icon.png',
